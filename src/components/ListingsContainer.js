@@ -1,11 +1,29 @@
 import React from "react";
-// import ListingCard from "./ListingCard";
+import ListingCard from "./ListingCard";
 
-function ListingsContainer() {
+  function ListingsContainer({ itemsToDisplay, setListings }) {
+
+    function handleDelete(post) {
+      fetch(`http://localhost:6001/listings/${post.id}`, {
+      method: "DELETE"
+    })
+    .then(res => res.json())
+    .then( () => {
+      const newData = itemsToDisplay.filter((item) => (item.id !== post.id))
+      setListings(newData)
+    })
+    }
+
+    const allListings = itemsToDisplay.map(post => {
+      return (
+        <ListingCard key={post.id}post={post} onDelete={handleDelete}/>
+      )
+    })
+
   return (
     <main>
       <ul className="cards">
-        {/* use the ListingCard component to display listings */}
+        {allListings}
       </ul>
     </main>
   );
